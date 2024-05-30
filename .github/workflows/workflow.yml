@@ -52,7 +52,7 @@ jobs:
         tags: |
           ghcr.io/jiechau/ppp:${{ matrix.arch }}
 
-create-manifest:
+  create-manifest:
     runs-on: ubuntu-latest
     needs: build-and-push
     steps:
