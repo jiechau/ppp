@@ -31,7 +31,9 @@ do_gitlab:
     - docker buildx build --platform linux/arm64 --build-arg ARCH=arm64 -t $CI_REGISTRY_IMAGE:arm64 --push .
     - docker buildx create --use --name mybuilder_final
     #- echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
-    - docker buildx imagetools create -t $CI_REGISTRY_IMAGE $CI_REGISTRY_IMAGE:amd64 $CI_REGISTRY_IMAGE:arm64
+    - docker buildx imagetools create -t $CI_REGISTRY_IMAGE:latest $CI_REGISTRY_IMAGE:amd64 $CI_REGISTRY_IMAGE:arm64
+    - docker buildx imagetools create -t $CI_REGISTRY_IMAGE:3.9 $CI_REGISTRY_IMAGE:amd64 $CI_REGISTRY_IMAGE:arm64
+    - docker buildx imagetools create -t $CI_REGISTRY_IMAGE:3.9.6 $CI_REGISTRY_IMAGE:amd64 $CI_REGISTRY_IMAGE:arm64
 
   only:
     - main
