@@ -1,6 +1,6 @@
 stages:
   - build_gitlab
-#  - build_dockerhub
+  - build_dockerhub
 
 variables:
   DOCKER_DRIVER: overlay2
@@ -13,7 +13,7 @@ services:
 
 before_script:
   - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  
 
 
 do_gitlab:
@@ -24,6 +24,7 @@ do_gitlab:
     - echo $IMAGE_NAME
     - echo $CI_REGISTRY_IMAGE
     - echo 'jie'
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     #- docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker buildx create --use --name mybuilder_amd64
     - docker buildx build --platform linux/amd64 --build-arg ARCH=amd64 -t $CI_REGISTRY_IMAGE:amd64 --push .
@@ -34,15 +35,22 @@ do_gitlab:
     - docker buildx imagetools create -t $CI_REGISTRY_IMAGE:latest $CI_REGISTRY_IMAGE:amd64 $CI_REGISTRY_IMAGE:arm64
     - docker buildx imagetools create -t $CI_REGISTRY_IMAGE:3.9 $CI_REGISTRY_IMAGE:amd64 $CI_REGISTRY_IMAGE:arm64
     - docker buildx imagetools create -t $CI_REGISTRY_IMAGE:3.9.6 $CI_REGISTRY_IMAGE:amd64 $CI_REGISTRY_IMAGE:arm64
-
   only:
     - main
 
-#do_dockerhub:
-#  image: docker:latest
-#  stage: build_dockerhub
-#  script:
-#    - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
-#    - docker buildx build --platform linux/amd64,linux/arm64 -t jiechau/python:$IMAGE_TAG -t jiechau/python:3.9 --push .
-#  only:
-#    - main
+do_dockerhub:
+  image: docker:latest
+  stage: build_dockerhub
+  script:
+    - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+
+    - docker buildx create --use --name mybuilder_h_amd64
+    - docker buildx build --platform linux/amd64 --build-arg ARCH=amd64 -t jiechau/ppp:amd64 --push .
+    - docker buildx create --use --name mybuilder_h_arm64
+    - docker buildx build --platform linux/arm64 --build-arg ARCH=arm64 -t jiechau/ppp:arm64 --push .
+    - docker buildx create --use --name mybuilder_h_final
+    - docker buildx imagetools create -t jiechau/ppp:latest jiechau/ppp:amd64 jiechau/ppp:arm64
+    - docker buildx imagetools create -t jiechau/ppp:3.9 jiechau/ppp:amd64 jiechau/ppp:arm64
+    - docker buildx imagetools create -t jiechau/ppp:3.9.6 jiechau/ppp:amd64 jiechau/ppp:arm64
+  only:
+    - main
