@@ -26,6 +26,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}     # GitHub provides this token automatically
 
       - name: Build and push multi-arch images (amd64 & arm64)
+        with:
+          registry: ghcr.io
+          #username: ${{ github.actor }}
+          #password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ github.repository_owner }}  # Your GitHub username
+          password: ${{ secrets.GITHUB_TOKEN }}     # GitHub provides this token automatically
         run: |
           docker buildx create --use --name mybuilder_amd64
           docker buildx build --platform linux/amd64 --build-arg ARCH=amd64 -t ghcr.io/${{ github.repository }}:amd64 --push .
