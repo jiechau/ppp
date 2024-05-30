@@ -53,7 +53,7 @@ jobs:
           ghcr.io/jiechau/ppp:${{ matrix.arch }}
 
     - name: Create and push multi-arch manifest
-      if: ${{ matrix.arch == 'amd64' }}
+#      if: ${{ matrix.arch == 'amd64' }}
       run: |
         echo 'jie manifest jie'
         docker manifest create ghcr.io/jiechau/ppp:latest --amend ghcr.io/jiechau/ppp:amd64 --amend ghcr.io/jiechau/ppp:arm64
