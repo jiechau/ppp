@@ -5,7 +5,7 @@ stages:
 variables:
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""
-  IMAGE_NAME: my-image-name # Replace with your image name
+  IMAGE_NAME: ppp # Replace with your image name
   IMAGE_TAG: latest # Replace with your desired tag or use $CI_COMMIT_REF_SLUG for dynamic tagging
 
 services:
@@ -21,9 +21,12 @@ do_gitlab:
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker buildx create --use --name mybuilder_amd64
-    - docker buildx build --platform linux/amd64 --build-arg ARCH=amd64 -t $CI_REGISTRY_IMAGE:$IMAGE_TAG -t $CI_REGISTRY_IMAGE:3.9 --push .
+    - docker buildx build --platform linux/amd64 --build-arg ARCH=amd64 -t $CI_REGISTRY_IMAGE:amd64 --push .
     - docker buildx create --use --name mybuilder_arm64
-    - docker buildx build --platform linux/arm64 --build-arg ARCH=arm64 -t $CI_REGISTRY_IMAGE:$IMAGE_TAG -t $CI_REGISTRY_IMAGE:3.9 --push .
+    - docker buildx build --platform linux/arm64 --build-arg ARCH=arm64 -t $CI_REGISTRY_IMAGE:arm64 --push .
+    - docker buildx create --use --name mybuilder_final
+    - docker buildx imagetools create -t $IMAGE_NAME $IMAGE_NAME:amd64 $IMAGE_NAME:arm64
+
   only:
     - main
 
