@@ -1,0 +1,35 @@
+stages:
+  - build_gitlab
+#  - build_dockerhub
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  IMAGE_NAME: my-image-name # Replace with your image name
+  IMAGE_TAG: latest # Replace with your desired tag or use $CI_COMMIT_REF_SLUG for dynamic tagging
+
+services:
+  - docker:dind
+
+before_script:
+  - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+  - docker buildx create --use --name mybuilder
+
+do_gitlab:
+  image: docker:latest
+  stage: build_gitlab
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx build --platform linux/amd64 --build-arg ARCH=amd64 -t $CI_REGISTRY_IMAGE:$IMAGE_TAG -t $CI_REGISTRY_IMAGE:3.9 --push .
+    - docker buildx build --platform linux/arm64 --build-arg ARCH=arm64 -t $CI_REGISTRY_IMAGE:$IMAGE_TAG -t $CI_REGISTRY_IMAGE:3.9 --push .
+  only:
+    - main
+
+#do_dockerhub:
+#  image: docker:latest
+#  stage: build_dockerhub
+#  script:
+#    - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+#    - docker buildx build --platform linux/amd64,linux/arm64 -t jiechau/python:$IMAGE_TAG -t jiechau/python:3.9 --push .
+#  only:
+#    - main
