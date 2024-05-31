@@ -46,8 +46,10 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        platforms: linux/${{ matrix.arch }}
+        platforms: linux/amd64,linux/arm64
         build-args: |
           ARCH=${{ matrix.build_arg }}
         tags: |
           ghcr.io/jiechau/ppp:${{ matrix.arch }}
+          ghcr.io/jiechau/ppp:latest
+          ghcr.io/jiechau/ppp:3.9
