@@ -52,19 +52,27 @@ jobs:
         tags: |
           ghcr.io/jiechau/ppp:${{ matrix.arch }}
 
-  create-manifest: # This is the new step to create and push the manifest list
+  create-manifest:
     runs-on: ubuntu-latest
-    needs: build-and-push # Wait for all builds to finish
+    needs: build-and-push
     steps:
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Create and push manifest list for latest and 3.9
-        run: |
-          docker manifest create ghcr.io/jiechau/ppp:latest --amend ghcr.io/jiechau/ppp:amd64 --amend ghcr.io/jiechau/ppp:arm64
-          docker manifest push ghcr.io/jiechau/ppp:latest
-          docker manifest create ghcr.io/jiechau/ppp:3.9 --amend ghcr.io/jiechau/ppp:amd64 --amend ghcr.io/jiechau/ppp:arm64
-          docker manifest push ghcr.io/jiechau/ppp:3.9
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create and push multi-architecture manifest for latest
+      run: |
+        docker manifest create ghcr.io/jiechau/ppp:latest \
+          --amend ghcr.io/jiechau/ppp:amd64 \
+          --amend ghcr.io/jiechau/ppp:arm64
+        docker manifest push ghcr.io/jiechau/ppp:latest
+
+    - name: Create and push multi-architecture manifest for 3.9
+      run: |
+        docker manifest create ghcr.io/jiechau/ppp:3.9 \
+          --amend ghcr.io/jiechau/ppp:amd64 \
+          --amend ghcr.io/jiechau/ppp:arm64
+        docker manifest push ghcr.io/jiechau/ppp:3.9
