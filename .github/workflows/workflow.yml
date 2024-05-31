@@ -64,7 +64,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Create and push manifest list for latest and 3.9
         run: |
-          docker manifest create -t ghcr.io/jiechau/ppp:latest ghcr.io/jiechau/ppp:amd64 ghcr.io/jiechau/ppp:arm64
+          docker manifest create ghcr.io/jiechau/ppp:latest --amend ghcr.io/jiechau/ppp:amd64 --amend ghcr.io/jiechau/ppp:arm64
           docker manifest push ghcr.io/jiechau/ppp:latest
-          docker manifest create -t ghcr.io/jiechau/ppp:3.9 ghcr.io/jiechau/ppp:amd64 ghcr.io/jiechau/ppp:arm64
+          docker manifest create ghcr.io/jiechau/ppp:3.9 --amend ghcr.io/jiechau/ppp:amd64 --amend ghcr.io/jiechau/ppp:arm64
           docker manifest push ghcr.io/jiechau/ppp:3.9
