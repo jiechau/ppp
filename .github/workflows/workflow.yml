@@ -12,14 +12,14 @@ jobs:
       contents: read
       packages: write
 
-    strategy:
-      matrix:
-        arch: [amd64, arm64]
-        include:
-          - arch: amd64
-            build_arg: amd64
-          - arch: arm64
-            build_arg: arm64
+#    strategy:
+#      matrix:
+#        arch: [amd64, arm64]
+#        include:
+#          - arch: amd64
+#            build_arg: amd64
+#          - arch: arm64
+#            build_arg: arm64
 
     steps:
     - name: Set up QEMU
