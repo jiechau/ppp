@@ -68,6 +68,8 @@ jobs:
         docker manifest create ghcr.io/jiechau/ppp:latest \
           --amend ghcr.io/jiechau/ppp:amd64 \
           --amend ghcr.io/jiechau/ppp:arm64
+        docker manifest annotate ghcr.io/jiechau/ppp:latest ghcr.io/jiechau/ppp:amd64 --os linux --arch amd64
+        docker manifest annotate ghcr.io/jiechau/ppp:latest ghcr.io/jiechau/ppp:arm64 --os linux --arch arm64
         docker manifest push ghcr.io/jiechau/ppp:latest
 
     - name: Create and push multi-architecture manifest for 3.9
@@ -75,4 +77,6 @@ jobs:
         docker manifest create ghcr.io/jiechau/ppp:3.9 \
           --amend ghcr.io/jiechau/ppp:amd64 \
           --amend ghcr.io/jiechau/ppp:arm64
+        docker manifest annotate ghcr.io/jiechau/ppp:3.9 ghcr.io/jiechau/ppp:amd64 --os linux --arch amd64
+        docker manifest annotate ghcr.io/jiechau/ppp:3.9 ghcr.io/jiechau/ppp:arm64 --os linux --arch arm64
         docker manifest push ghcr.io/jiechau/ppp:3.9
