@@ -65,6 +65,7 @@ jobs:
 
     - name: Create and push multi-architecture manifest for latest
       run: |
+        export DOCKER_CLI_EXPERIMENTAL=enabled \
         docker manifest create ghcr.io/jiechau/ppp:latest \
           --amend ghcr.io/jiechau/ppp:amd64 \
           --amend ghcr.io/jiechau/ppp:arm64
@@ -74,6 +75,7 @@ jobs:
 
     - name: Create and push multi-architecture manifest for 3.9
       run: |
+        export DOCKER_CLI_EXPERIMENTAL=enabled \
         docker manifest create ghcr.io/jiechau/ppp:3.9 \
           --amend ghcr.io/jiechau/ppp:amd64 \
           --amend ghcr.io/jiechau/ppp:arm64
