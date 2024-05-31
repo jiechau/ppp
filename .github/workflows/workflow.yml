@@ -51,5 +51,20 @@ jobs:
           ARCH=${{ matrix.build_arg }}
         tags: |
           ghcr.io/jiechau/ppp:${{ matrix.arch }}
-          ghcr.io/jiechau/ppp:latest
-          ghcr.io/jiechau/ppp:3.9
+
+  create-manifest: # This is the new step to create and push the manifest list
+    runs-on: ubuntu-latest
+    needs: build-and-push # Wait for all builds to finish
+    steps:
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create and push manifest list for latest and 3.9
+        run: |
+          docker manifest create ghcr.io/jiechau/ppp:latest ghcr.io/jiechau/ppp:amd64 ghcr.io/jiechau/ppp:arm64
+          docker manifest push ghcr.io/jiechau/ppp:latest
+          docker manifest create ghcr.io/jiechau/ppp:3.9 ghcr.io/jiechau/ppp:amd64 ghcr.io/jiechau/ppp:arm64
+          docker manifest push ghcr.io/jiechau/ppp:3.9
