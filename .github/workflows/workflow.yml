@@ -67,3 +67,4 @@ jobs:
       run: |
         docker buildx create --use --name mybuilder_h_final
         docker buildx imagetools create -t ghcr.io/jiechau/ppp:latest ghcr.io/jiechau/ppp:amd64 ghcr.io/jiechau/ppp:arm64
+        docker buildx imagetools create -t ghcr.io/jiechau/ppp:3.9 ghcr.io/jiechau/ppp:amd64 ghcr.io/jiechau/ppp:arm64
