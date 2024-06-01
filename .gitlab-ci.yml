@@ -43,8 +43,8 @@ do_dockerhub:
   image: docker:latest
   stage: build_dockerhub
   script:
-    - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
-
+#    - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
     - docker buildx create --use --name mybuilder_h_amd64
     - docker buildx build --platform linux/amd64 --build-arg ARCH=amd64 -t jiechau/ppp:amd64 --push .
     - docker buildx create --use --name mybuilder_h_arm64
