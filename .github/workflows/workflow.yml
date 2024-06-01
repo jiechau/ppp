@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -55,13 +59,11 @@ jobs:
           push: true
           tags: |
             ghcr.io/jiechau/ppp:${{ matrix.arch }}
-            ghcr.io/jiechau/ppp:latest
-            ghcr.io/jiechau/ppp:3.9
           platforms: ${{ matrix.platform }}
           build-args: |
             ARCH=${{ matrix.arch }}
 
-      - name: Create and push manifest for multi-arch
+      - name: Create and push multi-arch manifests
         run: |
           docker manifest create ghcr.io/jiechau/ppp:latest \
             --amend ghcr.io/jiechau/ppp:amd64 \
