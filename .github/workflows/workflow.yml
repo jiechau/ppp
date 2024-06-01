@@ -45,8 +45,8 @@ jobs:
         push: true
         tags: |
           ${{ env.IMAGE_NAME }}:${{ matrix.arch }}
-          ${{ env.IMAGE_NAME }}:latest
-          ${{ env.IMAGE_NAME }}:3.9
+#          ${{ env.IMAGE_NAME }}:latest
+#          ${{ env.IMAGE_NAME }}:3.9
         build-args: |
           ARCH=${{ matrix.arch }}
           
@@ -66,13 +66,13 @@ jobs:
     - name: Push manifest
       run: |
         docker manifest create ghcr.io/jiechau/ppp:latest \
-          --amend ghcr.io/jiechau/ppp:amd64 \
-          --amend ghcr.io/jiechau/ppp:arm64
+          ghcr.io/jiechau/ppp:amd64 \
+          ghcr.io/jiechau/ppp:arm64
         
         docker manifest push ghcr.io/jiechau/ppp:latest
         
         docker manifest create ghcr.io/jiechau/ppp:3.9 \
-          --amend ghcr.io/jiechau/ppp:amd64 \
-          --amend ghcr.io/jiechau/ppp:arm64
+          ghcr.io/jiechau/ppp:amd64 \
+          ghcr.io/jiechau/ppp:arm64
           
         docker manifest push ghcr.io/jiechau/ppp:3.9
