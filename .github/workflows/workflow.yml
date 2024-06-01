@@ -2,9 +2,8 @@ name: Build and Push Docker Images
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    tags:
+      - push_github
 
 env:
   IMAGE_NAME: ghcr.io/jiechau/ppp
@@ -47,8 +46,6 @@ jobs:
         push: true
         tags: |
           ${{ env.IMAGE_NAME }}:${{ matrix.arch }}
-#          ${{ env.IMAGE_NAME }}:latest
-#          ${{ env.IMAGE_NAME }}:3.9
         build-args: |
           ARCH=${{ matrix.arch }}
           
