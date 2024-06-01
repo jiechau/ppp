@@ -35,7 +35,7 @@ do_gitlab:
     refs:
       - tags
     variables:
-      - $CI_COMMIT_TAG == "push"
+      - $CI_COMMIT_TAG == "*push*"
 #  only:
 #    - main
 
@@ -56,6 +56,6 @@ do_dockerhub:
     refs:
       - tags
     variables:
-      - $CI_COMMIT_TAG == "push"
+      - $CI_COMMIT_TAG == "*push*"
 #  only:
 #    - main
