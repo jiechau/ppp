@@ -3,6 +3,8 @@ FROM python:3.9.6
 ENV TZ="Asia/Taipei"
 RUN date
 
+RUN echo ${ARCH} > /app/os-release
+
 WORKDIR /app
 #COPY ./requirements.txt /app/requirements.txt
 #RUN pip install --upgrade pip
