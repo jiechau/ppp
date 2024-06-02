@@ -49,6 +49,7 @@ do_dockerhub:
 #    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
     - mkdir -p ~/.docker
     - base64_encoded_credentials=$(echo -n "$DOCKER_HUB_USERNAME:$DOCKER_HUB_PASSWORD" | base64); echo '{"auths":{"https://index.docker.io/v1/":{"auth":"'$base64_encoded_credentials'"}}}' > ~/.docker/config.json
+    - cat ~/.docker/config.json
 
     - docker buildx create --use --name mybuilder_h_amd64
     - docker buildx build --platform linux/amd64 --build-arg ARCH=amd64 -t jiechau/ppp:amd64 --push .
